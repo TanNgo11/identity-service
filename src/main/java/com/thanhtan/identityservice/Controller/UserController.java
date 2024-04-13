@@ -24,21 +24,21 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setCode(1000);
-        apiResponse.setResult(userService.createUser(request));
-        return apiResponse;
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
+                .build();
 
     }
 
-//    @GetMapping
-//    ApiResponse<List<User>> getUsers(){
-//        ApiResponse<User> apiResponse = new ApiResponse<>();
-//        apiResponse.setCode(1000);
-//        apiResponse.setResult(userService.getUsers());
-//        return userService.getUsers();
-//    }
+    @GetMapping
+    ApiResponse<List<UserResponse>> getUsers(){
+
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
+    }
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
