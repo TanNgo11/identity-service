@@ -1,6 +1,6 @@
 package com.thanhtan.identityservice.exception;
 
-import com.thanhtan.identityservice.dto.request.ApiResponse;
+import com.thanhtan.identityservice.dto.response.ApiResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

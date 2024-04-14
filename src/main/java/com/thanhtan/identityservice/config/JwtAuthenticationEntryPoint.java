@@ -1,7 +1,7 @@
 package com.thanhtan.identityservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thanhtan.identityservice.dto.request.ApiResponse;
+import com.thanhtan.identityservice.dto.response.ApiResponse;
 import com.thanhtan.identityservice.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

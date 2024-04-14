@@ -2,6 +2,7 @@ package com.thanhtan.identityservice.service;
 
 import com.thanhtan.identityservice.dto.request.UserCreationRequest;
 import com.thanhtan.identityservice.dto.request.UserUpdateRequest;
+import com.thanhtan.identityservice.dto.response.PaginatedApiResponse;
 import com.thanhtan.identityservice.dto.response.UserResponse;
 import com.thanhtan.identityservice.entity.User;
 import com.thanhtan.identityservice.enums.Role;
@@ -13,6 +14,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +49,12 @@ public class UserService {
 
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public PaginatedApiResponse<UserResponse> getUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        Page<UserResponse> userResponses = users.map(userMapper::toUserResponse);
+        return PaginatedApiResponse.createFrom(userResponses, "Fetched successfully");
     }
 
 

@@ -1,4 +1,4 @@
-package com.thanhtan.identityservice.dto.request;
+package com.thanhtan.identityservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@Builder(toBuilder = true)
 public class ApiResponse<T> {
     int code;
     String message;

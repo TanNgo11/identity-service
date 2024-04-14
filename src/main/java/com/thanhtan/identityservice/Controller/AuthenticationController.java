@@ -1,9 +1,7 @@
 package com.thanhtan.identityservice.Controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.thanhtan.identityservice.dto.request.ApiResponse;
+import com.thanhtan.identityservice.dto.response.ApiResponse;
 import com.thanhtan.identityservice.dto.request.AuthenticationRequest;
 import com.thanhtan.identityservice.dto.request.IntrospectRequest;
 import com.thanhtan.identityservice.dto.response.AuthenticationResponse;
@@ -12,7 +10,6 @@ import com.thanhtan.identityservice.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.catalina.util.Introspection;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

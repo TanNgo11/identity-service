@@ -1,17 +1,19 @@
 package com.thanhtan.identityservice.Controller;
 
-import com.thanhtan.identityservice.dto.request.ApiResponse;
 import com.thanhtan.identityservice.dto.request.UserCreationRequest;
 import com.thanhtan.identityservice.dto.request.UserUpdateRequest;
+import com.thanhtan.identityservice.dto.response.ApiResponse;
+import com.thanhtan.identityservice.dto.response.PaginatedApiResponse;
 import com.thanhtan.identityservice.dto.response.UserResponse;
-import com.thanhtan.identityservice.entity.User;
 import com.thanhtan.identityservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,21 +38,34 @@ public class UserController {
     }
 
     @GetMapping("/myInfo")
-    ApiResponse<UserResponse> getMyInfo(){
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getUsers(){
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    ResponseEntity<ApiResponse<List<UserResponse>>> getUsers() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    log.info("Username {}", authentication.getName());
-    authentication.getAuthorities().forEach(grantedAuthority -> log.info("GrantedAuthority {}", grantedAuthority.getAuthority()));
-        return ApiResponse.<List<UserResponse>>builder()
+        log.info("Username {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info("GrantedAuthority {}", grantedAuthority.getAuthority()));
+
+        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
-                .build();
+                .build());
+
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<PaginatedApiResponse<UserResponse>> getUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PaginatedApiResponse<UserResponse> response = userService.getUsers(pageable);
+
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{userId}")
