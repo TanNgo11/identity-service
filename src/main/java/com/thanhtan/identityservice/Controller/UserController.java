@@ -45,27 +45,27 @@ public class UserController {
     }
 
     @GetMapping
-    ResponseEntity<ApiResponse<List<UserResponse>>> getUsers() {
+    ApiResponse<List<UserResponse>> getUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         log.info("Username {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info("GrantedAuthority {}", grantedAuthority.getAuthority()));
 
-        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
+        return(ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
                 .build());
 
     }
 
     @GetMapping("/page")
-    public ResponseEntity<PaginatedApiResponse<UserResponse>> getUsers(
+    public PaginatedApiResponse<UserResponse> getUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         PaginatedApiResponse<UserResponse> response = userService.getUsers(pageable);
 
 
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @GetMapping("/{userId}")

@@ -5,7 +5,6 @@ import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -15,14 +14,10 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class User extends BaseEntity {
-
-    String username;
-    String password;
-    String firstName;
-    LocalDate dob;
-    String lastName;
+public class Role extends BaseEntity{
+    String name;
+    String description;
 
     @ManyToMany
-    Set<Role> roles;
+    Set<Permission> permissions;
 }
