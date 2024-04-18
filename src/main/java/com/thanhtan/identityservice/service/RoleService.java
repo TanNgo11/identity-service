@@ -27,6 +27,7 @@ public class RoleService {
 
     public RoleResponse createRole(RoleRequest request) {
         Role role = roleMapper.toRole(request);
+
         role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissions())));
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
@@ -38,7 +39,7 @@ public class RoleService {
                 .map(roleMapper::toRoleResponse).collect(Collectors.toList());
     }
 
-    public void deleteRole(Long roleId) {
+    public void deleteRole(String roleId) {
         roleRepository.deleteById(roleId);
     }
 

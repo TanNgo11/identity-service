@@ -9,17 +9,16 @@ import com.thanhtan.identityservice.enums.Role;
 import com.thanhtan.identityservice.exception.AppException;
 import com.thanhtan.identityservice.exception.ErrorCode;
 import com.thanhtan.identityservice.mapper.UserMapper;
+import com.thanhtan.identityservice.repository.RoleRepository;
 import com.thanhtan.identityservice.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +31,12 @@ import java.util.List;
 public class UserService {
 
     UserRepository userRepository;
+
     UserMapper userMapper;
+
     PasswordEncoder passwordEncoder;
+
+    RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -63,7 +66,9 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_EXISTED));
 
         userMapper.updateUser(user, request);
-
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -73,7 +78,8 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<UserResponse> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserResponse).toList();
@@ -86,7 +92,7 @@ public class UserService {
     }
 
 
-    public UserResponse getMyInfo(){
+    public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 

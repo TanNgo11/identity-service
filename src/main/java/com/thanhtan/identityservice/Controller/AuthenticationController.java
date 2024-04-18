@@ -1,6 +1,8 @@
 package com.thanhtan.identityservice.Controller;
 
 import com.nimbusds.jose.JOSEException;
+import com.thanhtan.identityservice.dto.request.LogoutRequest;
+import com.thanhtan.identityservice.dto.request.RefreshRequest;
 import com.thanhtan.identityservice.dto.response.ApiResponse;
 import com.thanhtan.identityservice.dto.request.AuthenticationRequest;
 import com.thanhtan.identityservice.dto.request.IntrospectRequest;
@@ -40,6 +42,22 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException, ParseException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 

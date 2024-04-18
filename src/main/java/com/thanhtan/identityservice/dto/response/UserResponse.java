@@ -21,7 +21,7 @@ public class UserResponse extends AbstractDTO<UserResponse> {
     String lastName;
     LocalDate dob;
 
-    Set<String> roles;
+    Set<RoleResponse> roles;
 
 
 

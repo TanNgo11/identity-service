@@ -36,7 +36,7 @@ public class PermissionService {
         return permissions.stream().map(permissionMapper::toPermissionResponse).collect(Collectors.toList());
     }
 
-    public  void deletePermission(Long id) {
+    public  void deletePermission(String id) {
         permissionRepository.deleteById(id);
     }
 

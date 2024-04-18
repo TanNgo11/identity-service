@@ -36,7 +36,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/{permissionId}")
-    ApiResponse<Void> deletePermission(@PathVariable Long permissionId) {
+    ApiResponse<Void> deletePermission(@PathVariable String permissionId) {
         permissionService.deletePermission(permissionId);
         return ApiResponse.<Void>builder().build();
     }
